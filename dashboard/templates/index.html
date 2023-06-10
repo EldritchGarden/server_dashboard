@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lange="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Server Dashboard</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    #main {
+      padding: 10px;
+      border-left: 2px solid teal;
+      max-width: 1024px;
+      margin: 20px auto;
+    }
+    .container {
+      display: flex;
+      align-items: center;
+    }
+    .section {
+      flex: 1;
+    }
+    .button {
+      font-size: 16px;
+      padding: 10px;
+      width: 120px;
+      background-color: teal;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    form {
+      width: 120px;
+      margin: 0;
+    }
+    h1 {
+      color: teal;
+    }
+  </style>
+</head>
+<body>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul class="flashes">
+    {% for msg in messages %}
+    <li>{{ msg }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+  
+  <!-- TODO must pass server_list -->
+  {% for server in server_list %}
+  <div id="main" class="container">
+    <div class="section">
+      <h1>{{ server.name }}</h1>
+      <p><em>{{ server.get_usage_string() }}</em></p>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="section" style="max-width: 70px;">
+          <!-- TODO add tooltip to icons -->
+          {% if server.get_state()['state'] == 'running' %}
+          <i class="material-icons" style="color: limegreen;">cloud_queue</i>
+          {% else %}
+          <i class="material-icons" style="color: gray;">cloud_off</i>
+          {% endif %}
+        </div>
+        <div class="section">
+          <form method='post' action="/">
+            <!-- TODO disable button if running -->
+            <input class="button" type="submit" value="START">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</body>
+</html>
