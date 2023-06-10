@@ -56,20 +56,25 @@
     </div>
     <div class="section">
       <div class="container">
+        {% with state = server.get_state()['state'] %}
         <div class="section" style="max-width: 70px;">
-          <!-- TODO add tooltip to icons -->
-          {% if server.get_state()['state'] == 'running' %}
-          <i class="material-icons" style="color: limegreen;">cloud_queue</i>
+          {% if state == 'running' %}
+          <i class="material-icons" style="color: limegreen;" title="running">cloud_queue</i>
           {% else %}
-          <i class="material-icons" style="color: gray;">cloud_off</i>
+          <i class="material-icons" style="color: gray;" title="offline">cloud_off</i>
           {% endif %}
         </div>
         <div class="section">
           <form method='post' action="/">
-            <!-- TODO disable button if running -->
+            <!-- TODO handle starting case ? -->
+            {% if state not in ('running') %}
             <input class="button" type="submit" value="START">
+            {% else %}
+            <input class="button" type="submit" value="START" disabled>
+            {% endif %}
           </form>
         </div>
+        {% endwith %}
       </div>
     </div>
   </div>

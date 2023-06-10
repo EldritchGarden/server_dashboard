@@ -81,6 +81,8 @@ class Server:
         return state
     
     # TODO check overall resource usage/availability
+    # TODO if state is 'stopping' wait for stop before sending start signal
+    # maybe handle all not running cases ?
     def start(self) -> str:
         current_state = self.get_state()
 
