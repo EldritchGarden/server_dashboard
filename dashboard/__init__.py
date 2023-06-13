@@ -15,7 +15,6 @@ def index():
 
     return render_template('index.html', server_list=server_list())
 
-# TODO define any routes needed for start_server.js
 @app.route('/start/<id>', methods=['POST'])
 def send_start_signal(id: str) -> str:
     try:

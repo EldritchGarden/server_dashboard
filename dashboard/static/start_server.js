@@ -1,3 +1,6 @@
+// used by index.html to control rendering for certain elements
+// and handle server starting
+
 async function fetch_state(id) {
     let response = await fetch(`/state/${id}`);
     let state = await response.text();
@@ -12,11 +15,20 @@ async function unhide_elements() {
         let state = await fetch_state(item.id);
         console.log(`State of ${item.id} is ${state}`);
 
-        if (state == "running") {
+        // default state shows offline icon and disabled button.
+        // start button is only enabled if state is 'offline' to help
+        //   prevent multiple signals.
+        // if in an ephemeral state (starting, stopping) show loading icon
+        if (state == 'running') {
             document.getElementById(`${item.id}_icon_offline`).setAttribute('hidden', '');
-            document.getElementById(`${item.id}_start_button`).setAttribute('hidden', '');
             document.getElementById(`${item.id}_icon_running`).removeAttribute('hidden');
-            document.getElementById(`${item.id}_disabled_button`).removeAttribute('hidden');
+            
+        } else if (state == 'offline') {
+            document.getElementById(`${item.id}_disabled_button`).setAttribute('hidden', '');
+            document.getElementById(`${item.id}_start_button`).removeAttribute('hidden');
+        } else {
+            document.getElementById(`${item.id}_icon_offline`).setAttribute('hidden', '');
+            document.getElementById(`${item.id}_icon_loading`).removeAttribute('hidden');
         }
     }
 }

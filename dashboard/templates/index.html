@@ -9,18 +9,9 @@
   <script type="text/javascript" src="/static/start_server.js" defer></script>
 </head>
 <body>
-  <!-- TODO better messages formatting -->
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  <ul class="flashes">
-    {% for msg in messages %}
-    <li>{{ msg }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
-  {% endwith %}
   
   <!-- TODO display overall node usage -->
+  <!-- and maybe some more basic info  -->
 
   {% for server in server_list %}
   <div class="container main" id="{{ server.id }}">
@@ -31,7 +22,6 @@
     <div class="section">
       <div class="container">
         <div class="section" style="max-width: 70px;">
-          <!-- TODO set ids on spans -->
           <span id="{{ server.id }}_icon_running" hidden>
             <i class="material-icons" style="color: limegreen;" title="running">cloud_queue</i>
           </span>  
@@ -41,9 +31,8 @@
           <div id="{{ server.id }}_icon_loading" class="loader" hidden></div>
         </div>
         <div class="section">
-          <!-- TODO handle starting case ? -->
-          <button id="{{ server.id }}_start_button" name="start" value="{{ server.id }}" onClick="start_server(this)">START</button>
-          <button id="{{ server.id }}_disabled_button" class="disabled" title="Already Running" disabled hidden>START</button>
+          <button id="{{ server.id }}_start_button" name="start" value="{{ server.id }}" onClick="start_server(this)" hidden>START</button>
+          <button id="{{ server.id }}_disabled_button" class="disabled" title="Already Running" disabled>START</button>
         </div>
       </div>
     </div>

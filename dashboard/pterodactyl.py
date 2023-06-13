@@ -91,21 +91,12 @@ class Server:
         
         self.client.servers.send_power_action(self.id, 'start')
         return self.wait_for_state('running')
-    
-    def stop(self) -> str:
-        current_state = self.get_state()
-
-        if current_state['state'] != 'running':
-            return f"Error: Cannot stop server from state: current_state['state']"
-        
-        self.client.servers.send_power_action(self.id, 'stop')
-        return self.wait_for_state('offline')
 
 
 def server_list() -> list:
-    # TODO do not include servers with 'DEV' in their name
     servers = []
     for s in Server.client.servers.list_servers().collect():
-        servers.append(Server(s['attributes']['identifier']))
+        if 'DEV' not in s['attributes']['name']:
+            servers.append(Server(s['attributes']['identifier']))
 
     return servers
