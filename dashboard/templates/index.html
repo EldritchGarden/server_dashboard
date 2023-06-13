@@ -1,42 +1,15 @@
 <!DOCTYPE html>
-<html lange="en">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Server Dashboard</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <style>
-    #main {
-      padding: 10px;
-      border-left: 2px solid teal;
-      max-width: 1024px;
-      margin: 20px auto;
-    }
-    .container {
-      display: flex;
-      align-items: center;
-    }
-    .section {
-      flex: 1;
-    }
-    .button {
-      font-size: 16px;
-      padding: 10px;
-      width: 120px;
-      background-color: teal;
-      color: white;
-      border: none;
-      border-radius: 4px;
-    }
-    form {
-      width: 120px;
-      margin: 0;
-    }
-    h1 {
-      color: teal;
-    }
-  </style>
+  <link rel="stylesheet" href="/static/index.css">
+  <script type="text/javascript" src="/static/start_server.js" defer></script>
 </head>
 <body>
+  <!-- TODO better messages formatting -->
   {% with messages = get_flashed_messages() %}
   {% if messages %}
   <ul class="flashes">
@@ -47,34 +20,31 @@
   {% endif %}
   {% endwith %}
   
-  <!-- TODO must pass server_list -->
+  <!-- TODO display overall node usage -->
+
   {% for server in server_list %}
-  <div id="main" class="container">
+  <div class="container main" id="{{ server.id }}">
     <div class="section">
       <h1>{{ server.name }}</h1>
       <p><em>{{ server.get_usage_string() }}</em></p>
     </div>
     <div class="section">
       <div class="container">
-        {% with state = server.get_state()['state'] %}
         <div class="section" style="max-width: 70px;">
-          {% if state == 'running' %}
-          <i class="material-icons" style="color: limegreen;" title="running">cloud_queue</i>
-          {% else %}
-          <i class="material-icons" style="color: gray;" title="offline">cloud_off</i>
-          {% endif %}
+          <!-- TODO set ids on spans -->
+          <span id="{{ server.id }}_icon_running" hidden>
+            <i class="material-icons" style="color: limegreen;" title="running">cloud_queue</i>
+          </span>  
+          <span id="{{ server.id }}_icon_offline">
+            <i class="material-icons" style="color: gray;" title="offline">cloud_off</i>
+          </span>
+          <div id="{{ server.id }}_icon_loading" class="loader" hidden></div>
         </div>
         <div class="section">
-          <form method='post' action="/">
-            <!-- TODO handle starting case ? -->
-            {% if state not in ('running') %}
-            <input class="button" type="submit" value="START">
-            {% else %}
-            <input class="button" type="submit" value="START" disabled>
-            {% endif %}
-          </form>
+          <!-- TODO handle starting case ? -->
+          <button id="{{ server.id }}_start_button" name="start" value="{{ server.id }}" onClick="start_server(this)">START</button>
+          <button id="{{ server.id }}_disabled_button" class="disabled" title="Already Running" disabled hidden>START</button>
         </div>
-        {% endwith %}
       </div>
     </div>
   </div>

@@ -103,6 +103,7 @@ class Server:
 
 
 def server_list() -> list:
+    # TODO do not include servers with 'DEV' in their name
     servers = []
     for s in Server.client.servers.list_servers().collect():
         servers.append(Server(s['attributes']['identifier']))
