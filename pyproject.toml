@@ -1,0 +1,11 @@
+[project]
+name = "dashboard"
+version = "1.0.0"
+dependencies = [
+    "flask",
+    "py-dactyl",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

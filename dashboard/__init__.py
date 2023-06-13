@@ -3,10 +3,13 @@ from requests import HTTPError
 
 from dashboard.pterodactyl import Server, server_list
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 app.config.from_mapping(
     SECRET_KEY='dev'
 )
+
+# load instance config if present
+app.config.from_pyfile('config.py', silent=True)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
